@@ -28,6 +28,7 @@ RUN poetry config virtualenvs.create false \
 # Creating folders, and files for a project:
 COPY . .
 
-EXPOSE 5001
+# By default, listen on port 5000
+EXPOSE 5000/tcp
 
 CMD [ "python", "app.py"]
