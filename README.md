@@ -28,3 +28,5 @@ https://aws.amazon.com/getting-started/hands-on/serve-a-flask-app/
 * https://stackoverflow.com/questions/67361936/exec-user-process-caused-exec-format-error-in-aws-fargate-service
 * e.g. instead of a regular build, use buildx to specifcally build for amd:
 * $ docker buildx build --platform=linux/amd64 -t {wantedTagName for Image} .
+* # Mac OS Monterey already uses port 5000
+* https://medium.com/pythonistas/port-5000-already-in-use-macos-monterey-issue-d86b02edd36c

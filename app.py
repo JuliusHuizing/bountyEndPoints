@@ -2,6 +2,8 @@
 from flask import Flask, request
 import pandas as pd
 from car_finder_api import find_car
+from flask import jsonify
+
 
 
 df_cars = pd.read_csv("vehicles.csv", low_memory=False)
@@ -15,13 +17,14 @@ def rootRoute():
 
 @app.route('/cars')
 def car_finder():
+    top = request.args.get("top")
     make = request.args.get("make")
     model = request.args.get("model")
     year = request.args.get("year")
     
-    result = find_car(f"{make} {model} {year}", df_cars).to_dict(orient='records')
-
-    return result[0], 200  # return data and 200 OK code
+    result = find_car(f"{make} {model} {year}", df_cars, top=int(top)).to_dict(orient='records')
+    print(result)
+    return jsonify(result), 200  # return data and 200 OK code
 
 @app.route('/query-example')
 def query_example():

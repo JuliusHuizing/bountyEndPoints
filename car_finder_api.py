@@ -4,6 +4,7 @@ import pandas as pd
 from fuzzywuzzy import fuzz
 import numpy as np
 import logging
+
 logger = logging.getLogger()
 logger.setLevel(logging.ERROR)
 
@@ -20,7 +21,7 @@ def findTopNMatches(word, options, n=3, similarity_algorithm=fuzz):
     options=np.array(list(options))
     return options[topn_indices]
 
-def querry_to_df_matches(df, querry):
+def querry_to_df_matches(df, querry, top):
     try: 
         maker, model, year = querry.split(" ")
     except:
@@ -29,7 +30,7 @@ def querry_to_df_matches(df, querry):
     makers=df["make"]
     logging.debug(f"Finding maker, model, and year match for querry '{querry}'.")
     
-    maker_match = findTopNMatches(maker, makers, n=1)[0]
+    maker_match = findTopNMatches(maker, makers, n=top)[0]
     logging.debug(f"...found maker match '{maker_match}'.")
     
     # For successful querries, we should only find models that belong to the given maker.
@@ -51,15 +52,17 @@ def querry_to_df_matches(df, querry):
 
     return {"make": maker_match, "model": model_match, "year": year_match}
 
-def get_car_info(df, make, model, year, max1=True):
-    if max1:
-        return df.loc[(df['make'] == make) & (df['model'] == model) & (df['year'] == year)].iloc[[0]]
-    else:
-        return df.loc[(df['make'] == make) & (df['model'] == model) & (df['year'] == year)]
+def get_car_info(df, make, model, year, top):
+    return df.loc[(df['make'] == make) & (df['model'] == model) & (df['year'] == year)].iloc[:top]
     
-def find_car(querry, df):
+def find_car(querry, df, top):
     df = pre_process(df)
     df['year'] = df['year'].map(str)
-    match = querry_to_df_matches(df, querry=querry)
-    return get_car_info(df=df, **match)
+    match = querry_to_df_matches(df, querry=querry, top=top)
+    return get_car_info(df=df, **match, top=top)
 
+
+# TODO rm/comment this
+# df_cars = pd.read_csv("vehicles.csv", low_memory=False)
+# print("test")
+# print(find_car(querry = "audi a4 2005", df=df_cars, top=3).to_dict(orient='records'))
