@@ -42,9 +42,12 @@ aws lightsail push-container-image --service-name flask-service --label flask-co
 4. Update reference to image (= output previous step) to local 'container.json' file.
 5. Deploy to AWS lightsail:
 aws lightsail create-container-service-deployment --service-name flask-service --containers file://containers.json --public-endpoint file://public-endpoint.json
-1. clean up after yourself locally:
+6. Check whether the config of your deployment seems right:
+aws lightsail get-container-services
+7. clean up after yourself locally:
    * NB this removes all local container, corresponding volume, and images. If this is  not what you want, rm images in isolation.
 docker rm -vf $(docker ps -aq)
 docker rmi -f $(docker images -aq)
+
 
    
