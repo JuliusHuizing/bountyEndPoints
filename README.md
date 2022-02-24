@@ -30,3 +30,21 @@ https://aws.amazon.com/getting-started/hands-on/serve-a-flask-app/
 * $ docker buildx build --platform=linux/amd64 -t {wantedTagName for Image} .
 * # Mac OS Monterey already uses port 5000
 * https://medium.com/pythonistas/port-5000-already-in-use-macos-monterey-issue-d86b02edd36c
+
+
+
+# New deployment workflow
+1. save changes locally & test.
+2. build now docker image locally:
+docker buildx build --platform=linux/amd64 -t {tag} .
+3. Push local container image to remote AWS lightsail:
+aws lightsail push-container-image --service-name flask-service --label flask-container --image {tag}
+4. Update reference to image (= output previous step) to local 'container.json' file.
+5. Deploy to AWS lightsail:
+aws lightsail create-container-service-deployment --service-name flask-service --containers file://containers.json --public-endpoint file://public-endpoint.json
+1. clean up after yourself locally:
+   * NB this removes all local container, corresponding volume, and images. If this is  not what you want, rm images in isolation.
+docker rm -vf $(docker ps -aq)
+docker rmi -f $(docker images -aq)
+
+   
