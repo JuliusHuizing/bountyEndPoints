@@ -1,5 +1,13 @@
 # ReadMe
 
+# Run locally
+* go to the dir.
+* $ poetry shell 
+* $ poetry intstall
+* $ python app.py
+* go to the provided endpoint, and call
+[endpoint]/cars?top=4&make=audi&model=a4&year=2008
+
 # Set Up & Trouble Shooting:
 ## Solving problems with exposing right port on right host:
 * run in detached mode -d (e.g. docker run -dp 5001:5001 image-tag)

@@ -29,6 +29,6 @@ RUN poetry config virtualenvs.create false \
 COPY . .
 
 # By default, listen on port 5000
-EXPOSE 5000/tcp
+EXPOSE 5001/tcp
 
 CMD [ "python", "app.py"]
