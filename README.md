@@ -42,13 +42,20 @@ https://aws.amazon.com/getting-started/hands-on/serve-a-flask-app/
 
 
 # New deployment workflow
-1. save changes locally & test.
-2. build now docker image locally:
+1. Set debugmode (app.py) to False.
+2. Esnure all ports are set to 5000 (for local test on M1, we need 5001, but for aws we need 5000)
+* dockerfile
+* app.py
+* containers.json
+3. save changes locally & test.
+4. build now docker image locally:
 docker buildx build --platform=linux/amd64 -t {tag} .
-3. Push local container image to remote AWS lightsail:
+4. Create container service (in Ireland, otherwise it does not show up ?): https://lightsail.aws.amazon.com/ls/webapp/home/containers
+5. Push local container image to remote AWS lightsail:
 aws lightsail push-container-image --service-name flask-service --label flask-container --image {tag}
 4. Update reference to image (= output previous step) to local 'container.json' file.
-5. Deploy to AWS lightsail:
+5. Ensure port is correct in 'containers.json'
+6. Deploy to AWS lightsail:
 aws lightsail create-container-service-deployment --service-name flask-service --containers file://containers.json --public-endpoint file://public-endpoint.json
 6. Check whether the config of your deployment seems right:
 aws lightsail get-container-services
@@ -57,5 +64,7 @@ aws lightsail get-container-services
 docker rm -vf $(docker ps -aq)
 docker rmi -f $(docker images -aq)
 
+aws lightsail push-container-image --service-name car-finder-service --label car-finder-container-2 --image car-finder-container-2
 
    
+aws lightsail create-container-service-deployment --service-name car-finder-service --containers file://containers.json --public-endpoint file://public-endpoint.json

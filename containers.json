@@ -1,6 +1,6 @@
 {
     "flask": {
-        "image": ":flask-service.flask-container.6",
+        "image": ":car-finder-service.car-finder-container-2.8",
         "ports": {
             "5000": "HTTP"
         }
